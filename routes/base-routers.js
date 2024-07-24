@@ -1,34 +1,26 @@
-import express from "express";
+import express from 'express';
 // import * as ctrl from "../controllers/v1";
 
 const baseRouters = express.Router();
 
-baseRouters.get("/", (req, res) => {
-  res.send("main page");
+baseRouters.get('/reviews', (req, res) => {
+  res.send('reviews page');
 });
 
-baseRouters.get("/about", (req, res) => {
-  res.send("about page");
+baseRouters.post('/reviews', (req, res) => {
+  res.send('post reviews');
 });
 
-baseRouters.get("/reviews", (req, res) => {
-  res.send("reviews page");
+baseRouters.post('/feedback', (req, res) => {
+  res.send('post feedback');
 });
 
-baseRouters.post("/reviews", (req, res) => {
-  res.send("post reviews");
+baseRouters.get('/templates', (req, res) => {
+  res.send('templates page');
 });
 
-baseRouters.post("/feedback", (req, res) => {
-  res.send("post feedback");
-});
-
-baseRouters.get("/templates", (req, res) => {
-  res.send("templates page");
-});
-
-baseRouters.post("/order-design", (req, res) => {
-  res.send("send order data");
+baseRouters.post('/order-design', (req, res) => {
+  res.send('send order data');
 });
 
 export default baseRouters;
