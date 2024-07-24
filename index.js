@@ -1,0 +1,55 @@
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import mongoose from "mongoose";
+
+import baseRouters from "./routes/base-routers.js";
+import userRouters from "./routes/user-routers.js";
+import inviteRouters from "./routes/invite-routers.js";
+
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./openapi.json" assert { type: "json" };
+
+const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use(morgan("tiny"));
+app.use(cors());
+app.use(express.json());
+
+app.use("/api/v1", baseRouters);
+app.use("/api/v1/users", userRouters);
+app.use("/api/v1/invites", inviteRouters);
+
+app.use((_, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+app.use((err, _, res, __) => {
+  console.log(err);
+  const { status = 500, message = "Internal server error" } = err;
+  res.status(status).json({ message });
+});
+
+const PORT = process.env.PORT || 8080;
+const uriDb = process.env.DB_HOST;
+
+const connection = mongoose.connect(uriDb, {});
+
+connection
+  .then(() => {
+    app.listen(PORT, async function () {
+      console.log(`Database connection successful`);
+      console.log(`Server running on port ${PORT}`);
+      console.log(
+        `Swagger UI is available at ${process.env.BASE_URI}/api-docs`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(`Server not running. Error message: ${err.message}`);
+    process.exit(1);
+  });
+
+export default app;
