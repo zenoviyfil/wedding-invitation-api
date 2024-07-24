@@ -3,9 +3,12 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 
-import baseRouters from "./routes/base-routers.js";
-import userRouters from "./routes/user-routers.js";
-import inviteRouters from "./routes/invite-routers.js";
+import {
+  baseRouters,
+  userRouters,
+  inviteRouters,
+  manageRouters,
+} from "./routes/index.js";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./openapi.json" assert { type: "json" };
@@ -21,6 +24,7 @@ app.use(express.json());
 app.use("/api/v1", baseRouters);
 app.use("/api/v1/users", userRouters);
 app.use("/api/v1/invites", inviteRouters);
+app.use("/api/v1/manage", manageRouters);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
