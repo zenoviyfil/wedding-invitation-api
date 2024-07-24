@@ -1,38 +1,38 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import mongoose from "mongoose";
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import mongoose from 'mongoose';
 
 import {
   baseRouters,
   userRouters,
   inviteRouters,
   manageRouters,
-} from "./routes/index.js";
+} from './routes/index.js';
 
-import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./openapi.json" assert { type: "json" };
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './openapi.json' assert { type: 'json' };
 
 const app = express();
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(morgan("tiny"));
+app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1", baseRouters);
-app.use("/api/v1/users", userRouters);
-app.use("/api/v1/invites", inviteRouters);
-app.use("/api/v1/manage", manageRouters);
+app.use('/api', baseRouters);
+app.use('/api/users', userRouters);
+app.use('/api/invites', inviteRouters);
+app.use('/api/manage', manageRouters);
 
 app.use((_, res) => {
-  res.status(404).json({ message: "Route not found" });
+  res.status(404).json({ message: 'Route not found' });
 });
 
 app.use((err, _, res, __) => {
   console.log(err);
-  const { status = 500, message = "Internal server error" } = err;
+  const { status = 500, message = 'Internal server error' } = err;
   res.status(status).json({ message });
 });
 
@@ -51,7 +51,7 @@ connection
       );
     });
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(`Server not running. Error message: ${err.message}`);
     process.exit(1);
   });
